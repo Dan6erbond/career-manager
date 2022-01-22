@@ -48,7 +48,11 @@
     // I suggest this setting for requiring return types on functions only where useful
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "prettier/prettier": ["error", {}, { "usePrettierrc": true }],
+    "prettier/prettier": [
+      "error",
+      { "endOfLine": "auto" },
+      { "usePrettierrc": true }
+    ],
     "camelcase": ["error"],
     "react/display-name": "off"
   },
