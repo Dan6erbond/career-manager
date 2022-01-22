@@ -123,7 +123,9 @@ export const ProjectListItem = ({
       data-handler-id={handlerId}
     >
       <HStack spacing={2}>
-        <DragHandleIcon ref={dragRef} cursor="move" />
+        <Box ref={dragRef} cursor="move">
+          <DragHandleIcon />
+        </Box>
         <Text>{description}</Text>
       </HStack>
     </Box>
