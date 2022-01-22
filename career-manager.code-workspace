@@ -1,0 +1,12 @@
+{
+  "folders": [
+    {
+      "name": "Career Manager",
+      "path": "./"
+    },
+    {
+      "name": "Client",
+      "path": "./client"
+    }
+  ]
+}
