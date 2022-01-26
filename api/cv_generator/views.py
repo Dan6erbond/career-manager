@@ -1,14 +1,11 @@
-from rest_framework import generics
+from rest_framework import generics, permissions, viewsets
 
 from .models import UserProfile
+from .permissions import IsOwner
 from .serializers import UserProfileSerializer
 
 
-class UserProfileList(generics.ListCreateAPIView):
+class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
-
-
-class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated, IsOwner]

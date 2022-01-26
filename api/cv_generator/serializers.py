@@ -3,19 +3,19 @@ from rest_framework import serializers
 from .models import *
 
 
-class LanguageProficiencySerializer(serializers.ModelSerializer):
+class LanguageProficiencySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = LanguageProficiency
         fields = "__all__"
 
 
-class WorkTaskTranslationSerializer(serializers.ModelSerializer):
+class WorkTaskTranslationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = WorkTaskTranslation
         fields = "__all__"
 
 
-class WorkTaskSerializer(serializers.ModelSerializer):
+class WorkTaskSerializer(serializers.HyperlinkedModelSerializer):
     translations = WorkTaskTranslationSerializer(many=True)
 
     class Meta:
@@ -23,13 +23,13 @@ class WorkTaskSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class WorkExperienceTranslationSerializer(serializers.ModelSerializer):
+class WorkExperienceTranslationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = WorkExperienceTranslation
         fields = "__all__"
 
 
-class WorkExperienceSerializer(serializers.ModelSerializer):
+class WorkExperienceSerializer(serializers.HyperlinkedModelSerializer):
     translations = WorkExperienceTranslationSerializer(many=True)
     tasks = WorkTaskSerializer(many=True, read_only=True)
 
@@ -38,28 +38,29 @@ class WorkExperienceSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class UserProfileTranslationSerializer(serializers.ModelSerializer):
+class UserProfileTranslationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = UserProfileTranslation
         fields = "__all__"
 
-class UserProfileSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.HyperlinkedRelatedField(view_name="user-detail")
     translations = UserProfileTranslationSerializer(many=True)
     languages = LanguageProficiencySerializer(many=True, read_only=True)
-    work_experiences = WorkExperienceSerializer(many=True, read_only=True)
+    work_experiences = serializers.HyperlinkedRelatedField(many=True, view_name="work_experience-detail", read_only=True)
 
     class Meta:
         model = UserProfile
         fields = "__all__"
 
 
-class ProjectTranslationSerializer(serializers.ModelSerializer):
+class ProjectTranslationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ProjectTranslation
         fields = "__all__"
 
 
-class ProjectSerializer(serializers.ModelSerializer):
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     translations = ProjectTranslationSerializer(many=True)
     category = serializers.SlugRelatedField("name", read_only=True)
 
@@ -68,23 +69,23 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ProjectCategorySerializer(serializers.ModelSerializer):
-    projects = ProjectSerializer(many=True, read_only=True)
+class ProjectCategorySerializer(serializers.HyperlinkedModelSerializer):
+    projects = serializers.HyperlinkedRelatedField(many=True, view_name="project-detail", read_only=True)
 
     class Meta:
         model = ProjectCategory
         fields = "__all__"
 
 
-class CVTranslationSerializer(serializers.ModelSerializer):
+class CVTranslationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CVTranslation
         fields = "__all__"
 
 
-class CVSerializer(serializers.ModelSerializer):
+class CVSerializer(serializers.HyperlinkedModelSerializer):
     translations = CVTranslationSerializer(many=True)
-    projects = ProjectSerializer(many=True, read_only=True)
+    projects = serializers.HyperlinkedRelatedField(many=True, view_name="project-detail", read_only=True)
 
     class Meta:
         model = CV
