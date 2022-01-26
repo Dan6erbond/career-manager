@@ -6,47 +6,66 @@ from .models import *
 class LanguageProficiencySerializer(serializers.ModelSerializer):
     class Meta:
         model = LanguageProficiency
-        fields = ["created", "language", "proficiency"]
+        fields = "__all__"
+
+
+class WorkTaskTranslationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkTaskTranslation
+        fields = "__all__"
 
 
 class WorkTaskSerializer(serializers.ModelSerializer):
+    translations = WorkTaskTranslationSerializer(many=True)
+
     class Meta:
         model = WorkTask
-        fields = ["created", "task"]
+        fields = "__all__"
+
+
+class WorkExperienceTranslationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkExperienceTranslation
+        fields = "__all__"
 
 
 class WorkExperienceSerializer(serializers.ModelSerializer):
+    translations = WorkExperienceTranslationSerializer(many=True)
     tasks = WorkTaskSerializer(many=True, read_only=True)
 
     class Meta:
         model = WorkExperience
-        fields = ["created", "company", "position", "start_date", "end_date", "tasks"]
+        fields = "__all__"
 
+
+class UserProfileTranslationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfileTranslation
+        fields = "__all__"
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    translations = UserProfileTranslationSerializer(many=True)
     languages = LanguageProficiencySerializer(many=True, read_only=True)
     work_experiences = WorkExperienceSerializer(many=True, read_only=True)
 
     class Meta:
         model = UserProfile
-        fields = [
-            "created",
-            "user",
-            "headline",
-            "email",
-            "phone",
-            "website",
-            "languages",
-            "work_experiences",
-        ]
+        fields = "__all__"
+
+
+class ProjectTranslationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectTranslation
+        fields = "__all__"
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    translations = ProjectTranslationSerializer(many=True)
     category = serializers.SlugRelatedField("name", read_only=True)
 
     class Meta:
         model = Project
-        fields = ["created", "name", "description", "category"]
+        fields = "__all__"
 
 
 class ProjectCategorySerializer(serializers.ModelSerializer):
@@ -54,12 +73,19 @@ class ProjectCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectCategory
-        fields = ["created", "name", "projects"]
+        fields = "__all__"
+
+
+class CVTranslationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CVTranslation
+        fields = "__all__"
 
 
 class CVSerializer(serializers.ModelSerializer):
+    translations = CVTranslationSerializer(many=True)
     projects = ProjectSerializer(many=True, read_only=True)
 
     class Meta:
         model = CV
-        fields = ["id", "created", "headline", "projects"]
+        fields = "__all__"
