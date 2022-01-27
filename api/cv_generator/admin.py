@@ -42,7 +42,30 @@ class WorkExperienceAdmin(admin.ModelAdmin):
 
 admin.site.register(WorkExperience, WorkExperienceAdmin)
 
-admin.site.register(Project)
+
+class ProjectTranslationInline(admin.TabularInline):
+    model = ProjectTranslation
+    extra = 1
+
+
+class ProjectAdmin(admin.ModelAdmin):
+    inlines = [ProjectTranslationInline]
+
+
+admin.site.register(Project, ProjectAdmin)
+
+
+class ProjectInline(admin.TabularInline):
+    model = Project
+    extra = 1
+    inlines = [ProjectTranslationInline]
+
+
+class ProjectCategoryAdmin(admin.ModelAdmin):
+    inlines = [ProjectInline]
+
+
+admin.site.register(ProjectCategory, ProjectCategoryAdmin)
 
 
 class CVProjectInline(admin.TabularInline):
@@ -60,21 +83,3 @@ class CVAdmin(admin.ModelAdmin):
 
 
 admin.site.register(CV, CVAdmin)
-
-
-class ProjectTranslationInline(admin.TabularInline):
-    model = ProjectTranslation
-    extra = 1
-
-
-class ProjectInline(admin.TabularInline):
-    model = Project
-    extra = 1
-    inlines = [ProjectTranslationInline]
-
-
-class ProjectCategoryAdmin(admin.ModelAdmin):
-    inlines = [ProjectInline]
-
-
-admin.site.register(ProjectCategory, ProjectCategoryAdmin)
