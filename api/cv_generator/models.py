@@ -23,6 +23,9 @@ class UserProfile(models.Model):
     phone = models.CharField(max_length=20, blank=True, null=True)
     website = models.URLField(blank=True, null=True)
 
+    def __str__(self) -> str:
+        return self.user.username
+
 
 class UserProfileTranslation(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -41,6 +44,9 @@ class LanguageProficiency(models.Model):
         choices=LANGUAGE_LEVEL, default="Basic", max_length=100
     )
 
+    def __str__(self) -> str:
+        return self.language
+
 
 class CV(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -50,6 +56,9 @@ class CV(models.Model):
 
     class Meta:
         ordering = ["created"]
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class CVTranslation(models.Model):
@@ -64,13 +73,16 @@ class WorkExperience(models.Model):
     user = models.ForeignKey(
         "auth.User", on_delete=models.CASCADE, related_name="work_experiences"
     )
-    cvs = models.ManyToManyField(CV, related_name="work_experiences")
+    cvs = models.ManyToManyField(CV, related_name="work_experiences", blank=True)
     company = models.CharField(max_length=100)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
 
     class Meta:
         ordering = ["start_date"]
+
+    def __str__(self) -> str:
+        return self.company
 
 
 class WorkExperienceTranslation(models.Model):
@@ -90,6 +102,9 @@ class WorkTask(models.Model):
 
     class Meta:
         ordering = ["created"]
+
+    def __str__(self) -> str:
+        return self.work_experience.company
 
 
 class WorkTaskTranslation(models.Model):
@@ -111,6 +126,9 @@ class ProjectCategory(models.Model):
     class Meta:
         ordering = ["created"]
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class Project(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -122,6 +140,9 @@ class Project(models.Model):
 
     class Meta:
         ordering = ["created"]
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class ProjectTranslation(models.Model):
