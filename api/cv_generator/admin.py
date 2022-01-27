@@ -46,6 +46,8 @@ class WorkExperienceTranslationInline(admin.TabularInline):
 
 class WorkExperienceAdmin(admin.ModelAdmin):
     inlines = [WorkTaskInline, WorkExperienceTranslationInline]
+    list_display = ["user", "company"]
+    list_filter = ["user"]
 
 
 admin.site.register(WorkExperience, WorkExperienceAdmin)
@@ -67,8 +69,8 @@ class ProjectTranslationInline(admin.StackedInline):
 
 class ProjectAdmin(admin.ModelAdmin):
     inlines = [ProjectTranslationInline]
-    list_display = ["category", "name"]
-    list_filter = ["category"]
+    list_display = ["user", "category", "name"]
+    list_filter = ["user", "category"]
 
 
 admin.site.register(Project, ProjectAdmin)
@@ -81,6 +83,8 @@ class ProjectInline(admin.TabularInline):
 
 class ProjectCategoryAdmin(admin.ModelAdmin):
     inlines = [ProjectInline]
+    list_display = ["user", "name"]
+    list_filter = ["user"]
 
 
 admin.site.register(ProjectCategory, ProjectCategoryAdmin)
@@ -98,6 +102,8 @@ class CVTranslationInline(admin.TabularInline):
 
 class CVAdmin(admin.ModelAdmin):
     inlines = [CVTranslationInline, CVProjectInline]
+    list_display = ["user", "title"]
+    list_filter = ["user"]
 
 
 admin.site.register(CV, CVAdmin)
