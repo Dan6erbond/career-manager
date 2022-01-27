@@ -21,9 +21,18 @@ class UserProfileAdmin(admin.ModelAdmin):
 admin.site.register(UserProfile, UserProfileAdmin)
 
 
+class WorkTaskTranslationForm(forms.ModelForm):
+    task = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = WorkTaskTranslation
+        fields = "__all__"
+
+
 class WorkTaskTranslationInline(admin.TabularInline):
     model = WorkTaskTranslation
     extra = 1
+    form = WorkTaskTranslationForm
 
 
 class WorkTaskAdmin(admin.ModelAdmin):
