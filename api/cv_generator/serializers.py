@@ -47,7 +47,6 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.HyperlinkedRelatedField(view_name="user-detail", read_only=True)
     translations = UserProfileTranslationSerializer(many=True)
     languages = LanguageProficiencySerializer(many=True, read_only=True)
-    work_experiences = serializers.HyperlinkedRelatedField(many=True, view_name="work_experience-detail", read_only=True)
 
     class Meta:
         model = UserProfile
