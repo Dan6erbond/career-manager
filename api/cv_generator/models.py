@@ -45,6 +45,7 @@ class LanguageProficiency(models.Model):
 class CV(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="cvs")
+    title = models.CharField(max_length=100, blank=True)
     projects = models.ManyToManyField("Project", through="CVProject")
 
     class Meta:
@@ -114,6 +115,7 @@ class ProjectCategory(models.Model):
 class Project(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, blank=True)
     category = models.ForeignKey(
         ProjectCategory, on_delete=models.CASCADE, related_name="projects"
     )
@@ -125,7 +127,6 @@ class Project(models.Model):
 class ProjectTranslation(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     language = models.CharField(max_length=2, choices=LANGUAGES)
-    name = models.CharField(max_length=100, blank=True)
     description = models.CharField(max_length=512, blank=True)
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, related_name="translations"
