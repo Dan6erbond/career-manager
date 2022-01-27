@@ -1,14 +1,6 @@
 from django.contrib import admin
 
-from .models import (
-    CV,
-    CVProject,
-    LanguageProficiency,
-    Project,
-    UserProfile,
-    WorkExperience,
-    WorkTask,
-)
+from .models import *
 
 
 class LanguageProficiencyInline(admin.TabularInline):
@@ -16,20 +8,36 @@ class LanguageProficiencyInline(admin.TabularInline):
     extra = 1
 
 
+class UserProfileTranslationInline(admin.TabularInline):
+    model = UserProfileTranslation
+    extra = 1
+
+
 class UserProfileAdmin(admin.ModelAdmin):
-    inlines = [LanguageProficiencyInline]
+    inlines = [LanguageProficiencyInline, UserProfileTranslationInline]
 
 
 admin.site.register(UserProfile, UserProfileAdmin)
 
 
+class WorkTaskTranslationInline(admin.TabularInline):
+    model = WorkTaskTranslation
+    extra = 1
+
+
 class WorkTaskInline(admin.TabularInline):
     model = WorkTask
+    extra = 1
+    inlines = [WorkTaskTranslationInline]
+
+
+class WorkExperienceTranslationInline(admin.TabularInline):
+    model = WorkExperienceTranslation
     extra = 1
 
 
 class WorkExperienceAdmin(admin.ModelAdmin):
-    inlines = [WorkTaskInline]
+    inlines = [WorkTaskInline, WorkExperienceTranslationInline]
 
 
 admin.site.register(WorkExperience, WorkExperienceAdmin)
@@ -42,8 +50,31 @@ class CVProjectInline(admin.TabularInline):
     extra = 1
 
 
+class CVTranslationInline(admin.TabularInline):
+    model = CVTranslation
+    extra = 1
+
+
 class CVAdmin(admin.ModelAdmin):
-    inlines = [CVProjectInline]
+    inlines = [CVTranslationInline, CVProjectInline]
 
 
 admin.site.register(CV, CVAdmin)
+
+
+class ProjectTranslationInline(admin.TabularInline):
+    model = ProjectTranslation
+    extra = 1
+
+
+class ProjectInline(admin.TabularInline):
+    model = Project
+    extra = 1
+    inlines = [ProjectTranslationInline]
+
+
+class ProjectCategoryAdmin(admin.ModelAdmin):
+    inlines = [ProjectInline]
+
+
+admin.site.register(ProjectCategory, ProjectCategoryAdmin)
