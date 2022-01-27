@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 
 from .models import *
@@ -25,10 +26,17 @@ class WorkTaskTranslationInline(admin.TabularInline):
     extra = 1
 
 
+class WorkTaskAdmin(admin.ModelAdmin):
+    model = WorkTask
+    inlines = [WorkTaskTranslationInline]
+
+
+admin.site.register(WorkTask, WorkTaskAdmin)
+
+
 class WorkTaskInline(admin.TabularInline):
     model = WorkTask
     extra = 1
-    inlines = [WorkTaskTranslationInline]
 
 
 class WorkExperienceTranslationInline(admin.TabularInline):
@@ -43,13 +51,24 @@ class WorkExperienceAdmin(admin.ModelAdmin):
 admin.site.register(WorkExperience, WorkExperienceAdmin)
 
 
-class ProjectTranslationInline(admin.TabularInline):
+class ProjectTranslationForm(forms.ModelForm):
+    description = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = ProjectTranslation
+        fields = "__all__"
+
+
+class ProjectTranslationInline(admin.StackedInline):
+    form = ProjectTranslationForm
     model = ProjectTranslation
     extra = 1
 
 
 class ProjectAdmin(admin.ModelAdmin):
     inlines = [ProjectTranslationInline]
+    list_display = ["category", "name"]
+    list_filter = ["category"]
 
 
 admin.site.register(Project, ProjectAdmin)
@@ -58,7 +77,6 @@ admin.site.register(Project, ProjectAdmin)
 class ProjectInline(admin.TabularInline):
     model = Project
     extra = 1
-    inlines = [ProjectTranslationInline]
 
 
 class ProjectCategoryAdmin(admin.ModelAdmin):
