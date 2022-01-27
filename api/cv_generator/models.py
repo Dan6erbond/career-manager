@@ -73,7 +73,6 @@ class WorkExperience(models.Model):
     user = models.ForeignKey(
         "auth.User", on_delete=models.CASCADE, related_name="work_experiences"
     )
-    cvs = models.ManyToManyField(CV, related_name="work_experiences", blank=True)
     company = models.CharField(max_length=100)
     start_date = models.DateField()
     end_date = models.DateField(blank=True, null=True)
