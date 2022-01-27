@@ -24,6 +24,10 @@ class UserProfile(models.Model):
     website = models.URLField(blank=True, null=True)
 
     def __str__(self) -> str:
+        if self.user.first_name:
+            if self.user.last_name:
+                return f"{self.user.first_name} {self.user.last_name}"
+            return self.user.first_name
         return self.user.username
 
 
