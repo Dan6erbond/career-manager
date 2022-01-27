@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 
-from .views import GroupViewSet, UserViewSet
+from .views import GroupViewSet, UserViewSet, CustomAuthToken
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
@@ -27,6 +27,7 @@ router.register(r"groups", GroupViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("api/auth/login", CustomAuthToken.as_view(), name="auth-login"),
     path("api/", include(router.urls)),
     path("api/", include("cv_generator.urls")),
 ]
