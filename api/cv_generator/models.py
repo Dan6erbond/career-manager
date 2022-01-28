@@ -68,6 +68,41 @@ class CVTranslation(models.Model):
     cv = models.ForeignKey(CV, on_delete=models.CASCADE, related_name="translations")
 
 
+class Education(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, related_name="educations"
+    )
+    institution = models.CharField(max_length=100)
+    start_date = models.DateField()
+    end_date = models.DateField(blank=True, null=True)
+
+    def __str__(self) -> str:
+        return self.institution
+
+
+class EducationTranslation(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    language = models.CharField(max_length=2, choices=LANGUAGES)
+    field = models.CharField(max_length=100)
+    education = models.ForeignKey(Education, on_delete=models.CASCADE, related_name="translations")
+
+
+class EducationTask(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    education = models.ForeignKey(Education, on_delete=models.CASCADE, related_name="tasks")
+
+    def __str__(self) -> str:
+        return str(self.education)
+
+
+class EducationTaskTranslation(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    language = models.CharField(max_length=2, choices=LANGUAGES)
+    task = models.CharField(max_length=512)
+    education_task = models.ForeignKey(EducationTask, on_delete=models.CASCADE, related_name="translations")
+
+
 class WorkExperience(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
@@ -103,7 +138,7 @@ class WorkTask(models.Model):
         ordering = ["created"]
 
     def __str__(self) -> str:
-        return self.work_experience.company
+        return str(self.work_experience)
 
 
 class WorkTaskTranslation(models.Model):

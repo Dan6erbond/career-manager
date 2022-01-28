@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.admin.decorators import display
 from django.contrib import admin
 
 from .models import *
@@ -19,6 +20,52 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 
 admin.site.register(UserProfile, UserProfileAdmin)
+
+
+class EducationTaskTranslationForm(forms.ModelForm):
+    task = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = EducationTaskTranslation
+        fields = "__all__"
+
+
+class EducationTaskTranslationInline(admin.TabularInline):
+    model = EducationTaskTranslation
+    extra = 1
+    form = EducationTaskTranslationForm
+
+
+class EducationTaskAdmin(admin.ModelAdmin):
+    inlines = [EducationTaskTranslationInline]
+    list_display = ["get_user", "education"]
+    list_filter = ["education__user"]
+
+    @display(description="User")
+    def get_user(self, obj: EducationTask):
+        return obj.education.user
+
+
+admin.site.register(EducationTask, EducationTaskAdmin)
+
+
+class EducationTaskInline(admin.StackedInline):
+    model = EducationTask
+    inlines = [EducationTaskTranslationInline]
+
+
+class EducationTranslationInline(admin.TabularInline):
+    model = EducationTranslation
+    extra = 1
+
+
+class EducationAdmin(admin.ModelAdmin):
+    inlines = [EducationTranslationInline, EducationTaskInline]
+    list_display = ["user", "institution", "start_date", "end_date"]
+    list_filter = ["user"]
+
+
+admin.site.register(Education, EducationAdmin)
 
 
 class WorkTaskTranslationForm(forms.ModelForm):
