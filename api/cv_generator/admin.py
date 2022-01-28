@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.admin.decorators import display
 from django.contrib import admin
 
+import nested_admin
+
 from .models import *
 
 
@@ -30,9 +32,9 @@ class EducationTaskTranslationForm(forms.ModelForm):
         fields = "__all__"
 
 
-class EducationTaskTranslationInline(admin.TabularInline):
+class EducationTaskTranslationInline(nested_admin.NestedTabularInline):
     model = EducationTaskTranslation
-    extra = 1
+    extra = 0
     form = EducationTaskTranslationForm
 
 
@@ -49,17 +51,18 @@ class EducationTaskAdmin(admin.ModelAdmin):
 admin.site.register(EducationTask, EducationTaskAdmin)
 
 
-class EducationTaskInline(admin.StackedInline):
+class EducationTaskInline(nested_admin.NestedStackedInline):
     model = EducationTask
     inlines = [EducationTaskTranslationInline]
+    extra = 0
 
 
-class EducationTranslationInline(admin.TabularInline):
+class EducationTranslationInline(nested_admin.NestedTabularInline):
     model = EducationTranslation
-    extra = 1
+    extra = 0
 
 
-class EducationAdmin(admin.ModelAdmin):
+class EducationAdmin(nested_admin.NestedModelAdmin):
     inlines = [EducationTranslationInline, EducationTaskInline]
     list_display = ["user", "institution", "start_date", "end_date"]
     list_filter = ["user"]
@@ -76,9 +79,9 @@ class WorkTaskTranslationForm(forms.ModelForm):
         fields = "__all__"
 
 
-class WorkTaskTranslationInline(admin.TabularInline):
+class WorkTaskTranslationInline(nested_admin.NestedTabularInline):
     model = WorkTaskTranslation
-    extra = 1
+    extra = 0
     form = WorkTaskTranslationForm
 
 
@@ -90,17 +93,18 @@ class WorkTaskAdmin(admin.ModelAdmin):
 admin.site.register(WorkTask, WorkTaskAdmin)
 
 
-class WorkTaskInline(admin.TabularInline):
+class WorkTaskInline(nested_admin.NestedTabularInline):
     model = WorkTask
     extra = 1
+    inlines = [WorkTaskTranslationInline]
 
 
-class WorkExperienceTranslationInline(admin.TabularInline):
+class WorkExperienceTranslationInline(nested_admin.NestedTabularInline):
     model = WorkExperienceTranslation
     extra = 1
 
 
-class WorkExperienceAdmin(admin.ModelAdmin):
+class WorkExperienceAdmin(nested_admin.NestedModelAdmin):
     inlines = [WorkTaskInline, WorkExperienceTranslationInline]
     list_display = ["user", "company"]
     list_filter = ["user"]
@@ -117,10 +121,10 @@ class ProjectTranslationForm(forms.ModelForm):
         fields = "__all__"
 
 
-class ProjectTranslationInline(admin.StackedInline):
+class ProjectTranslationInline(nested_admin.NestedStackedInline):
     form = ProjectTranslationForm
     model = ProjectTranslation
-    extra = 1
+    extra = 0
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -132,12 +136,13 @@ class ProjectAdmin(admin.ModelAdmin):
 admin.site.register(Project, ProjectAdmin)
 
 
-class ProjectInline(admin.TabularInline):
+class ProjectInline(nested_admin.NestedTabularInline):
     model = Project
-    extra = 1
+    inlines = [ProjectTranslationInline]
+    extra = 0
 
 
-class ProjectCategoryAdmin(admin.ModelAdmin):
+class ProjectCategoryAdmin(nested_admin.NestedModelAdmin):
     inlines = [ProjectInline]
     list_display = ["user", "name"]
     list_filter = ["user"]
