@@ -6,7 +6,7 @@ import {
 } from "../components/projects/ProjectListItem";
 import { projects as projectList } from "../lib/projects";
 
-export const Home = () => {
+export const DndShowcase = () => {
   const [projects, setProjects] = useState(projectList);
 
   const moveIndex = useCallback(
