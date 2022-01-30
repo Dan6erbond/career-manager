@@ -1,14 +1,8 @@
 import { DragHandleIcon } from "@chakra-ui/icons";
 import { Box, HStack, Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { CSSProperties, useEffect, useRef } from "react";
-import {
-  DropTargetMonitor,
-  useDrag,
-  useDragLayer,
-  useDrop,
-  XYCoord,
-} from "react-dnd";
+import { useEffect, useRef } from "react";
+import { DropTargetMonitor, useDrag, useDrop, XYCoord } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { DND_ITEM_TYPES } from "../../lib/constants";
 import { Project } from "../../types/Project";
@@ -35,7 +29,7 @@ export const ProjectListItem = ({
 
   const [{ isDragging }, dragRef, preview] = useDrag(
     () => ({
-      type: DND_ITEM_TYPES.PROJECT_LIST_ITEM,
+      type: DND_ITEM_TYPES.SHOWCASE_PROJECT_LIST_ITEM,
       item: () => {
         return { id, index, description };
       },
@@ -51,7 +45,7 @@ export const ProjectListItem = ({
   });
 
   const [{ handlerId }, dropRef] = useDrop({
-    accept: DND_ITEM_TYPES.PROJECT_LIST_ITEM,
+    accept: DND_ITEM_TYPES.SHOWCASE_PROJECT_LIST_ITEM,
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
@@ -116,7 +110,7 @@ export const ProjectListItem = ({
       }}
       ref={ref}
       animate={isDragging ? "drag" : "static"}
-      layoutId={`${DND_ITEM_TYPES.PROJECT_LIST_ITEM}-${id}`}
+      layoutId={`${DND_ITEM_TYPES.SHOWCASE_PROJECT_LIST_ITEM}-${id}`}
       rounded="md"
       shadow="md"
       p={4}
@@ -128,70 +122,6 @@ export const ProjectListItem = ({
         </Box>
         <Text>{description}</Text>
       </HStack>
-    </Box>
-  );
-};
-
-const layerStyles: CSSProperties = {
-  position: "fixed",
-  pointerEvents: "none",
-  zIndex: 100,
-  left: 0,
-  top: 0,
-  width: "100%",
-  height: "100%",
-};
-
-function getItemStyles(
-  initialOffset: XYCoord | null,
-  currentOffset: XYCoord | null
-) {
-  if (!initialOffset || !currentOffset) {
-    return {
-      display: "none",
-    };
-  }
-  let { x, y } = currentOffset;
-  const transform = `translate(${x}px, ${y}px)`;
-  return {
-    transform,
-    WebkitTransform: transform,
-  };
-}
-
-export const ProjectListItemDragLayer = () => {
-  const { itemType, isDragging, item, initialOffset, currentOffset } =
-    useDragLayer((monitor) => ({
-      item: monitor.getItem(),
-      itemType: monitor.getItemType(),
-      initialOffset: monitor.getInitialSourceClientOffset(),
-      currentOffset: monitor.getSourceClientOffset(),
-      isDragging: monitor.isDragging(),
-    }));
-
-  if (!isDragging) {
-    return null;
-  }
-
-  function renderItem() {
-    switch (itemType) {
-      case DND_ITEM_TYPES.PROJECT_LIST_ITEM:
-        return (
-          <Box rounded="md" shadow="md" p={4} bg="gray.50">
-            <HStack spacing={2}>
-              <DragHandleIcon />
-              <Text>{item.description}</Text>
-            </HStack>
-          </Box>
-        );
-    }
-  }
-
-  return (
-    <Box style={layerStyles}>
-      <Box style={getItemStyles(initialOffset, currentOffset)}>
-        {renderItem()}
-      </Box>
     </Box>
   );
 };
