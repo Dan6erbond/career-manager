@@ -15,15 +15,15 @@ def api_root(request, format=None):
     return Response(
         {
             "users": reverse("user-list", request=request, format=format),
-            "user_profiles": reverse(
-                "user_profile-list", request=request, format=format
-            ),
+            "groups": reverse("group-list", request=request, format=format),
+            "project_categories": reverse("projectcategory-list", request=request, format=format),
+            "projects": reverse("project-list", request=request, format=format),
         }
     )
 
 
 # ViewSets define the view behavior.
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
@@ -34,7 +34,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 # ViewSets define the view behavior.
-class GroupViewSet(viewsets.ModelViewSet):
+class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     """
     API endpoint that allows groups to be viewed or edited.
     """
@@ -46,12 +46,15 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                            context={'request': request})
+        serializer = self.serializer_class(
+            data=request.data, context={"request": request}
+        )
         serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
+        user = serializer.validated_data["user"]
         token, _ = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'type': TokenAuthentication.keyword,
-        })
+        return Response(
+            {
+                "token": token.key,
+                "type": TokenAuthentication.keyword,
+            }
+        )
