@@ -16,7 +16,7 @@ LANGUAGE_LEVEL = [
 
 class UserProfile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         "auth.User", on_delete=models.CASCADE, related_name="profile"
     )
     email = models.EmailField(blank=True, null=True)

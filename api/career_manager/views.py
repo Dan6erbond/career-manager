@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group, User
 from rest_framework import permissions, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.views import APIView, ObtainAuthToken
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -16,7 +16,9 @@ def api_root(request, format=None):
         {
             "users": reverse("user-list", request=request, format=format),
             "groups": reverse("group-list", request=request, format=format),
-            "project_categories": reverse("projectcategory-list", request=request, format=format),
+            "project_categories": reverse(
+                "projectcategory-list", request=request, format=format
+            ),
             "projects": reverse("project-list", request=request, format=format),
         }
     )
@@ -58,3 +60,11 @@ class CustomAuthToken(ObtainAuthToken):
                 "type": TokenAuthentication.keyword,
             }
         )
+
+
+class AuthMe(APIView):
+    permissions_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user, context={"request": request})
+        return Response(serializer.data)

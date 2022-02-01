@@ -1,14 +1,8 @@
 from rest_framework import generics, permissions, viewsets
 
-from .models import CV, Project, ProjectCategory, ProjectTranslation, UserProfile
+from .models import *
 from .permissions import IsOwner
-from .serializers import (
-    CVSerializer,
-    ProjectCategorySerializer,
-    ProjectSerializer,
-    ProjectTranslationSerializer,
-    UserProfileSerializer,
-)
+from .serializers import *
 
 
 class UserProfileViewSet(viewsets.ReadOnlyModelViewSet):
@@ -41,7 +35,31 @@ class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsOwner]
 
 
-class ProjectTranslationViewset(viewsets.ModelViewSet):
+class ProjectTranslationViewset(viewsets.ReadOnlyModelViewSet):
     queryset = ProjectTranslation.objects.all()
     serializer_class = ProjectTranslationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class WorkExperienceViewSet(viewsets.ModelViewSet):
+    queryset = WorkExperience.objects.all()
+    serializer_class = WorkExperienceSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwner]
+
+
+class WorkExperienceTranslationViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = WorkExperienceTranslation.objects.all()
+    serializer_class = WorkExperienceTranslationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class WorkTaskViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = WorkTask.objects.all()
+    serializer_class = WorkTaskSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+class WorkTaskTranslationViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = WorkTaskTranslation.objects.all()
+    serializer_class = WorkTaskTranslationSerializer
+    permission_classes = [permissions.IsAuthenticated]
