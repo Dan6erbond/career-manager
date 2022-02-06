@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 from . import views
 
@@ -25,11 +30,14 @@ router.register(r"users", views.UserViewSet)
 router.register(r"groups", views.GroupViewSet)
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path("api/auth/", include("rest_framework.urls", namespace="rest_framework")),
-    path("api/auth/login/", views.CustomAuthToken.as_view(), name="auth-login"),
-    path("api/auth/me/", views.AuthMe.as_view(), name="auth-login"),
-    path("api/", views.api_root, name="api-root"),
-    path("api/", include(router.urls)),
-    path("api/", include("cv_generator.urls")),
+    path(r"admin/", admin.site.urls),
+    # path(r"api/auth/login/", views.CustomAuthToken.as_view(), name="auth-login"),
+    # path(r"api/auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path(r"api/auth/login/", TokenObtainPairView.as_view(), name="token-obtain-pair"),
+    path(r"api/auth/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
+    path(r"api/auth/verify/", TokenVerifyView.as_view(), name="token-verify"),
+    path(r"api/auth/me/", views.AuthMe.as_view(), name="auth-login"),
+    path(r"api/", views.api_root, name="api-root"),
+    path(r"api/", include(router.urls)),
+    path(r"api/", include("cv_generator.urls")),
 ]

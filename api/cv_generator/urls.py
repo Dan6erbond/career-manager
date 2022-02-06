@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -16,12 +16,12 @@ router.register(r"work_task_translations", views.WorkTaskTranslationViewSet)
 
 urlpatterns = [
     path(
-        "project_categories/",
+        r"project_categories/",
         views.ProjectCategoryList.as_view(),
         name="projectcategory-list",
     ),
     path(
-        "project_categories/<int:pk>/",
+        r"project_categories/<int:pk>/",
         views.ProjectCategoryDetail.as_view(),
         name="projectcategory-detail",
     ),

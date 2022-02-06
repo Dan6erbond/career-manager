@@ -1,5 +1,8 @@
 django>=4.0.1
 djangorestframework>=3.13.1
+djangorestframework-simplejwt>=5.0.0
+django-cors-headers>=3.11.0
+django_environ>=0.8.1
 django-filter>=21.1
 django-nested-admin>=3.4.0
 markdown>=3.3.6
